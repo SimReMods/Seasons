@@ -254,7 +254,8 @@ def saves(r, exe):
     write(f"{game}/UserData/Houses/House01.iff", "house 1")
     write(f"{game}/UserData3/Neighborhood.iff", "hood 3")
     os.makedirs(f"{game}/UserData5", exist_ok=True)
-    root = os.path.splitdrive(os.path.abspath(game))[1].lstrip("\\/")
+    # realpath expands 8.3 short names (C:\Users\RUNNER~1 on GitHub runners), like .NET's Path.GetFullPath does
+    root = os.path.splitdrive(os.path.realpath(game))[1].lstrip("\\/")
     write(os.path.join(local, "VirtualStore", root, "UserData", "Neighborhood.iff"), "virtualised hood")
     write(f"{profile}/Saved Games/Electronic Arts/The Sims 25/UserData2/Houses/House05.iff", "legacy house")
     before = snapshot(game)
