@@ -1,0 +1,17 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SeasonsInstaller.App"
+             RequestedThemeVariant="Light">
+  <Application.Styles>
+    <FluentTheme />
+  </Application.Styles>
+  <Application.Resources>
+    <ResourceDictionary>
+
+      <FontFamily x:Key="SimsFont">Comic Sans MS, Chalkboard SE, Segoe Print, Trebuchet MS, fonts:Inter#Inter</FontFamily>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://SeasonsSetup/Controls/SimsButton.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

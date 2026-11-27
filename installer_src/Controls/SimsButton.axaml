@@ -1,0 +1,104 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="using:SeasonsInstaller.Controls">
+
+  <ControlTheme x:Key="{x:Type c:SimsButton}" TargetType="c:SimsButton">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Foreground" Value="#000086" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Template">
+      <ControlTemplate>
+
+        <Grid ColumnDefinitions="170,Auto" ColumnSpacing="2">
+          <TextBlock Name="PART_Label" Grid.Column="0" Text="{TemplateBinding Label}"
+                     Margin="{TemplateBinding LabelMargin}"
+                     VerticalAlignment="Bottom" HorizontalAlignment="Right" TextAlignment="Right"
+                     TextWrapping="Wrap"
+                     Foreground="{TemplateBinding Foreground}"
+                     FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" />
+          <Panel Grid.Column="1" Background="Transparent">
+            <Image Name="PART_Normal"  Source="{TemplateBinding NormalImage}"  Stretch="None" />
+            <Image Name="PART_Hover"   Source="{TemplateBinding HoverImage}"   Stretch="None" IsVisible="False" />
+            <Image Name="PART_Pressed" Source="{TemplateBinding PressedImage}" Stretch="None" IsVisible="False" />
+          </Panel>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:pointerover /template/ Image#PART_Hover">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:pointerover /template/ TextBlock#PART_Label">
+      <Setter Property="Foreground" Value="#0030E0" />
+    </Style>
+    <Style Selector="^:pressed /template/ Image#PART_Hover">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:pressed /template/ Image#PART_Pressed">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Setter Property="Opacity" Value="0.5" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="MaxisLogo" TargetType="Button">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="Transparent" Width="162" Height="117">
+          <Image Name="PART_Normal" Source="avares://SeasonsSetup/Assets/maxis_normal.png" Stretch="None" />
+          <Image Name="PART_Hover"  Source="avares://SeasonsSetup/Assets/maxis_hover.png"  Stretch="None" IsVisible="False" />
+          <Image Name="PART_Glow"   Source="avares://SeasonsSetup/Assets/maxis_glow.png"   Stretch="None" IsVisible="False" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pointerover /template/ Image#PART_Hover">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:pressed /template/ Image#PART_Hover">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:pressed /template/ Image#PART_Glow">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="PillButton" TargetType="Button">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontSize" Value="17" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Width="209" Height="49" Background="Transparent">
+          <Image Name="PART_Normal"  Source="avares://SeasonsSetup/Assets/Buttons/pill_normal.png"  Stretch="None" />
+          <Image Name="PART_Hover"   Source="avares://SeasonsSetup/Assets/Buttons/pill_hover.png"   Stretch="None" IsVisible="False" />
+          <Image Name="PART_Pressed" Source="avares://SeasonsSetup/Assets/Buttons/pill_pressed.png" Stretch="None" IsVisible="False" />
+
+          <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                            Margin="2,2,8,6" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}"
+                            FontWeight="{TemplateBinding FontWeight}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pointerover /template/ Image#PART_Hover">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Foreground" Value="#6FF6FF" />
+    </Style>
+    <Style Selector="^:pressed /template/ Image#PART_Hover">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:pressed /template/ Image#PART_Pressed">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

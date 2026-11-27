@@ -1,0 +1,150 @@
+name: Build installer
+
+# Tag push (v1.2.0)  -> version 1.2.0, GitHub Release with the zip attached
+#                       (a tag with a dash, e.g. v1.0-beta1, becomes a pre-release; setup warns about beta).
+# Anything else      -> version <VERSION>-dev.<run>, zip uploaded as a workflow artifact.
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      # Git LFS (ExpansionPack8.far): cache the objects so each build doesn't spend LFS bandwidth.
+      - name: List LFS objects
+        run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
+      - name: Cache LFS objects
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+          restore-keys: lfs-
+      - name: Pull LFS objects
+        run: git lfs pull
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Version
+        id: version
+        run: |
+          base=$(tr -d '[:space:]' < VERSION)
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            version="${GITHUB_REF_NAME#v}"
+          else
+            version="${base}-dev.${GITHUB_RUN_NUMBER}"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Building version $version"
+
+      # SimsModLoader release assets (latest release): one zip per mod and game edition
+      # (steam = Legacy Collection on Steam, ea = Legacy Collection in the EA app, cc = Complete Collection).
+      # Each holds winmm.dll (the loader), mods/<mod>.dll and its README; setup installs the set matching the
+      # user's game. Seasons is listed first so its winmm.dll wins. Missing zips fail a release (tag) build
+      # and only warn on other builds.
+      - name: Download mod loader zips
+        id: modloader
+        env:
+          BASE_URL: https://github.com/SimReMods/SimsModLoader/releases/latest/download
+          ZIPS: >-
+            seasons_steam-DO-NOT-DOWNLOAD.zip@steam seasons_ea-DO-NOT-DOWNLOAD.zip@ea seasons_cc-DO-NOT-DOWNLOAD.zip@cc
+            visit_lots_steam.zip@steam visit_lots_ea.zip@ea visit_lots_cc.zip@cc
+            multistory_steam.zip@steam multistory_ea.zip@ea
+            eyedropper_steam.zip@steam eyedropper_ea.zip@ea eyedropper_cc.zip@cc
+        run: |
+          mkdir -p build/modloader
+          : > build/modloader/sources.txt
+          extra=""
+          missing=0
+          for spec in $ZIPS; do
+            name="${spec%@*}"; edition="${spec#*@}"
+            if url=$(curl -fsSL --retry 3 -o "build/modloader/$name" -w '%{url_effective}' "$BASE_URL/$name"); then
+              echo "$name ($edition): $url"
+              echo "$name: $url" >> build/modloader/sources.txt
+              extra="$extra --extra-zip build/modloader/$name@$edition"
+            else
+              rm -f "build/modloader/$name"
+              missing=1
+              echo "::warning::$BASE_URL/$name is not available"
+            fi
+          done
+          if [[ $missing == 1 && "$GITHUB_REF" == refs/tags/v* ]]; then
+            echo "::error::a release needs every mod loader zip (see warnings above)"; exit 1
+          fi
+          echo "extra=$extra" >> "$GITHUB_OUTPUT"
+
+      - name: Publish (Native AOT, win-x64)
+        run: dotnet publish installer_src/SeasonsInstaller.csproj -c Release -r win-x64 -p:Version=${{ steps.version.outputs.version }} -o publish
+
+      - name: Verify exe resources (icon + UAC requireAdministrator manifest)
+        shell: python
+        run: |
+          import subprocess, sys
+          subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pefile"], check=True)
+          import pefile
+          pe = pefile.PE("publish/SeasonsSetup.exe")
+          found = {t.id: t for t in pe.DIRECTORY_ENTRY_RESOURCE.entries}
+          assert 14 in found, "no icon in SeasonsSetup.exe"
+          e = found[24].directory.entries[0].directory.entries[0]
+          manifest = pe.get_data(e.data.struct.OffsetToData, e.data.struct.Size)
+          assert b"requireAdministrator" in manifest, "manifest does not request admin rights"
+          print("icon and admin manifest present")
+
+      - name: Test install / upgrade / rollback / recovery / uninstall
+        run: python installer_src/tools/test_installer.py --exe publish/SeasonsSetup.exe --real install_files --docs installer_src/docs
+
+      - name: Build payload and single-file installer
+        run: |
+          v=${{ steps.version.outputs.version }}
+          python installer_src/tools/make_payload.py --files install_files --docs installer_src/docs \
+            --runtime publish --version "$v" --out build/payload.zip ${{ steps.modloader.outputs.extra }}
+          mkdir -p dist/pkg
+          python installer_src/tools/append_payload.py publish/SeasonsSetup.exe build/payload.zip dist/pkg/SeasonsSetup.exe
+          { echo "$v"; cat build/modloader/sources.txt; } > dist/pkg/version.txt
+          (cd dist/pkg && 7z a -tzip -mx=1 "../TheSimsSeasons-$v.zip" SeasonsSetup.exe version.txt > /dev/null)
+          ls -la dist
+
+      - name: Smoke test the single exe (starts UI from the embedded runtime)
+        continue-on-error: true
+        run: |
+          timeout 120 dist/pkg/SeasonsSetup.exe --screenshot dist/screenshot.png
+          test -s dist/screenshot.png
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TheSimsSeasons-${{ steps.version.outputs.version }}
+          path: |
+            dist/*.zip
+            dist/screenshot.png
+          compression-level: 0
+
+      - name: GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="${{ steps.version.outputs.version }}"
+          pre=""
+          [[ "$v" == *-* ]] && pre="--prerelease"   # v1.0-beta1 -> GitHub pre-release
+          gh release create "$GITHUB_REF_NAME" "dist/TheSimsSeasons-$v.zip" \
+            --title "The Sims: Seasons $v" --generate-notes $pre

@@ -1,0 +1,26 @@
+*.far filter=lfs diff=lfs merge=lfs -text
+
+# Game files must be stored byte-for-byte (manifest hashes, CRLF text formats)
+install_files/** -text
+installer_src/docs/** -text
+
+# install_files: everything is LFS by default (binary game data: .far, .iff, .flr, .wll, .spf, .bmp, .tga,
+# .wav, .mp3, .xa, .utk, .dll, .exe, ...), so an unknown binary extension can never end up as a regular blob.
+install_files/** filter=lfs diff=lfs merge=lfs -text
+
+# ...except known text formats, which stay regular git files (still -text: stored byte-for-byte).
+install_files/**/*.txt  !filter !diff !merge
+install_files/**/*.ini  !filter !diff !merge
+install_files/**/*.cfg  !filter !diff !merge
+install_files/**/*.inf  !filter !diff !merge
+install_files/**/*.cmx  !filter !diff !merge
+install_files/**/*.skn  !filter !diff !merge
+install_files/**/*.xml  !filter !diff !merge
+install_files/**/*.json !filter !diff !merge
+install_files/**/*.csv  !filter !diff !merge
+install_files/**/*.htm  !filter !diff !merge
+install_files/**/*.html !filter !diff !merge
+install_files/**/*.md   !filter !diff !merge
+install_files/**/*.bat  !filter !diff !merge
+install_files/**/*.cmd  !filter !diff !merge
+install_files/**/*.log  !filter !diff !merge

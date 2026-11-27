@@ -1,0 +1,84 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:SeasonsInstaller.Controls"
+        x:Class="SeasonsInstaller.MainWindow"
+        Title="The Sims: Seasons"
+        Icon="/Assets/setup.ico"
+        Width="640" Height="480"
+        CanResize="False" CanMaximize="False"
+        WindowDecorations="None"
+        WindowStartupLocation="CenterScreen"
+        Background="#0B2350"
+        FontFamily="{StaticResource SimsFont}">
+
+  <Panel>
+
+    <Image Name="BackgroundArt" Source="avares://SeasonsSetup/Assets/background.png"
+           Stretch="UniformToFill" PointerPressed="OnDragWindow" />
+
+    <Canvas Name="Menu">
+      <Button Name="MaxisButton" Theme="{StaticResource MaxisLogo}" Canvas.Left="9" Canvas.Top="346"
+              Click="OnMaxis" />
+
+      <c:SimsButton Name="InstallButton" Label="Install"
+                    DiscCentre="37.5,48" DiscRadius="28.5"
+                    NormalImage="/Assets/Buttons/install_normal.png" HoverImage="/Assets/Buttons/install_hover.png"
+                    PressedImage="/Assets/Buttons/install_pressed.png" Click="OnInstall" />
+      <c:SimsButton Name="PlayButton" Label="Play The Sims"
+                    DiscCentre="37.5,48" DiscRadius="28.5"
+                    NormalImage="/Assets/Buttons/play_normal.png" HoverImage="/Assets/Buttons/play_hover.png"
+                    PressedImage="/Assets/Buttons/play_pressed.png" Click="OnPlay" />
+      <c:SimsButton Name="WebsiteButton" Label="Visit TheSims.com"
+                    DiscCentre="26.5,27.5" DiscRadius="25.5"
+                    NormalImage="/Assets/Buttons/website_normal.png" HoverImage="/Assets/Buttons/website_hover.png"
+                    PressedImage="/Assets/Buttons/website_pressed.png" Click="OnWebsite" />
+      <c:SimsButton Name="ReadmeButton" Label="More Information"
+                    DiscCentre="32,46" DiscRadius="21"
+                    NormalImage="/Assets/Buttons/info_normal.png" HoverImage="/Assets/Buttons/info_hover.png"
+                    PressedImage="/Assets/Buttons/info_pressed.png" Click="OnReadme" />
+      <c:SimsButton Name="ExitButton" Label="Exit"
+                    DiscCentre="21.5,20" DiscRadius="18.5"
+                    NormalImage="/Assets/Buttons/exit_normal.png" HoverImage="/Assets/Buttons/exit_hover.png"
+                    PressedImage="/Assets/Buttons/exit_pressed.png" Click="OnExit" />
+    </Canvas>
+
+    <TextBlock Name="VersionText" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,8"
+               FontSize="10" Foreground="#99000086" IsHitTestVisible="False" />
+
+    <Border Name="BusyOverlay" IsVisible="False" Background="#99000814">
+      <Border Width="360" HorizontalAlignment="Center" VerticalAlignment="Center"
+              CornerRadius="12" Padding="18" BorderBrush="White" BorderThickness="2" Background="#E8F0FC">
+        <StackPanel Spacing="10">
+          <TextBlock Name="BusyTitle" FontSize="18" FontWeight="Bold" Foreground="#14307A" />
+          <ProgressBar Name="Progress" Minimum="0" Maximum="1" Height="14" Foreground="#4CC22E" />
+          <TextBlock Name="StatusText" FontSize="12" Foreground="#1A2440" TextTrimming="CharacterEllipsis" />
+        </StackPanel>
+      </Border>
+    </Border>
+
+    <Border Name="Overlay" IsVisible="False" Background="#99000814">
+      <Border Width="520" MaxHeight="400" HorizontalAlignment="Center" VerticalAlignment="Center"
+              CornerRadius="12" Padding="18" BorderBrush="White" BorderThickness="2">
+        <Border.Background>
+          <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Offset="0" Color="#F4F8FF" />
+            <GradientStop Offset="1" Color="#C9DBF5" />
+          </LinearGradientBrush>
+        </Border.Background>
+        <DockPanel>
+          <TextBlock Name="DialogTitle" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold"
+                     Foreground="#14307A" Margin="0,0,0,10" />
+          <WrapPanel Name="DialogButtons" DockPanel.Dock="Bottom" Orientation="Horizontal"
+                     HorizontalAlignment="Center" ItemSpacing="4" LineSpacing="2" Margin="0,10,0,0" />
+          <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Spacing="8">
+              <SelectableTextBlock Name="DialogText" TextWrapping="Wrap" FontSize="13" Foreground="#1A2440" />
+
+              <StackPanel Name="DialogChoices" Spacing="6" />
+            </StackPanel>
+          </ScrollViewer>
+        </DockPanel>
+      </Border>
+    </Border>
+  </Panel>
+</Window>
