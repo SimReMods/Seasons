@@ -1,0 +1,59 @@
+The Sims: Seasons - Seasons_2026-11-27
+
+Install: copy the contents of this folder into your The Sims game folder
+(the folder that contains Sims.exe and GameData). Allow it to merge folders.
+
+Seasons objects are in ExpansionPack8/ExpansionPack8.far. Animations, skins, SeasonsCareers.iff and the
+career pictures are loose files next to it, as the game needs them.
+
+These files are loose same-name overrides of Maxis objects. Maxis keeps the originals inside .far
+archives, which are not touched; deleting the loose file reverts to Maxis:
+  ExpansionPack2/Shrubs2.iff
+  ExpansionPack3/TreeCurb.iff
+  ExpansionPack3/TreesHD.iff
+  ExpansionPack3/plants3.iff
+  ExpansionPack4/Shrubs3.iff
+  ExpansionPack4/Trees4.iff
+  ExpansionPack5/FlowersUnleashed.iff
+  ExpansionPack5/GardenPlot.iff
+  ExpansionPack5/TreesUnleashed.iff
+  ExpansionPack6/PlantsSuperstar.iff
+  ExpansionPack6/ShrubsSuperstar.iff
+  ExpansionPack6/TreesSuperstar.iff
+  ExpansionPack7/FlowersSpellbound.iff
+  ExpansionPack7/PlantsSpellbound.iff
+  ExpansionPack7/ShrubsSpellbound.iff
+  ExpansionPack7/TreesSpellbound.iff
+  ExpansionPack7/VinePlot.iff
+  ExpansionShared/trees2.iff
+  GameData/Objects/CarPortal.iff
+  GameData/Objects/FlowersOutdoor.iff
+  GameData/Objects/Plants.iff
+  GameData/Objects/Shrubs.iff
+  GameData/Objects/Trees.iff
+
+These REPLACE existing Maxis files (downloads, startup splash, loading-screen text) - back them up first if you want to revert:
+  Downloads/CopedFlowers/FlowersCoped.iff
+  Downloads/Plants2/Plants2.iff
+  Downloads/Topiaries/Topiaries.iff
+  GameData/UIText.iff
+  UIGraphics/Logos/SetupDN.bmp
+  UIGraphics/Logos/SetupDu.bmp
+  UIGraphics/Logos/SetupFI.bmp
+  UIGraphics/Logos/SetupIt.bmp
+  UIGraphics/Logos/SetupKo.bmp
+  UIGraphics/Logos/SetupNO.bmp
+  UIGraphics/Logos/SetupPg.bmp
+  UIGraphics/Logos/SetupPo.bmp
+  UIGraphics/Logos/SetupSC.bmp
+  UIGraphics/Logos/SetupSw.bmp
+  UIGraphics/Logos/SetupTC.bmp
+  UIGraphics/Logos/SetupTh.bmp
+  UIGraphics/Logos/Setupde.bmp
+  UIGraphics/Logos/Setupfr.BMP
+  UIGraphics/Logos/Setupjp.bmp
+  UIGraphics/Logos/Setupsp.bmp
+  UIGraphics/Logos/setup.bmp
+  UIGraphics/Logos/setupuk.bmp
+
+Uninstall: delete the ExpansionPack8 folder, the Seasons walls/floors and the override files above.
