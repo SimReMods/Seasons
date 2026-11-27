@@ -42,6 +42,12 @@ Close The Sims before you install. The installer will not run while the game is 
   automatically puts back the original game files it replaced (the installer keeps a backup of them in the
   `SeasonsSetup` folder inside your game folder), leaving the game exactly as it was before.
 
+## Special thanks
+
+Special credits go to **mixiate** for [ts1-compiler](https://github.com/mixiate/ts1-compiler) and
+[ts1-renderer](https://github.com/mixiate/ts1-renderer). This is amazing work, which was the base of all new
+objects here!
+
 ## Disclaimer
 
 This is an unofficial fan project. It is not affiliated with or endorsed by Electronic Arts or Maxis.
