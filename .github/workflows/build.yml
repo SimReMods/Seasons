@@ -69,7 +69,6 @@ jobs:
           ZIPS: >-
             seasons_steam-DO-NOT-DOWNLOAD.zip@steam seasons_ea-DO-NOT-DOWNLOAD.zip@ea seasons_cc-DO-NOT-DOWNLOAD.zip@cc
             visit_lots_steam.zip@steam visit_lots_ea.zip@ea visit_lots_cc.zip@cc
-            multistory_steam.zip@steam multistory_ea.zip@ea
             eyedropper_steam.zip@steam eyedropper_ea.zip@ea eyedropper_cc.zip@cc
         run: |
           mkdir -p build/modloader

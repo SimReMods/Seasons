@@ -33,7 +33,6 @@ one zip per mod and game edition, and merges them into the package as edition-sp
 |---|---|
 | Seasons | `seasons_steam-DO-NOT-DOWNLOAD.zip`, `seasons_ea-DO-NOT-DOWNLOAD.zip`, `seasons_cc-DO-NOT-DOWNLOAD.zip` |
 | Visit Lots | `visit_lots_steam.zip`, `visit_lots_ea.zip`, `visit_lots_cc.zip` |
-| 4 Stories | `multistory_steam.zip`, `multistory_ea.zip` (no Complete Collection build) |
 | Eyedropper | `eyedropper_steam.zip`, `eyedropper_ea.zip`, `eyedropper_cc.zip` |
 
 Setup detects the game edition (Steam Legacy Collection / EA app Legacy / Complete Collection, overridable with
